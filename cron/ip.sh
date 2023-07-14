@@ -67,14 +67,7 @@ function generate(){
 	cp -f ./del.txt ./wireguard/del.txt && cp -f ./del.txt ./openvpn/del.txt
 }
 
-function packup(){
-	rm -rf ./zip/*
-	zip -r -D ./zip/wireguard.zip ./wireguard/*
-	zip -r -D ./zip/openvpn.zip ./openvpn/*
-}
-
 
 cnip
 gfwdomain
 generate
-packup

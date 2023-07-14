@@ -1,4 +1,4 @@
-name: 'update'
+name: update
 on: 
   workflow_dispatch:
   schedule:
@@ -7,21 +7,63 @@ jobs:
   run_bash:
     runs-on: ubuntu-latest
     steps:
-      - name: 'Checkout codes'
+      - name: Checkout codes
         uses: actions/checkout@main
         
-      - name: 'run the script'
+      - name: Run the script
         run: bash ./cron/ip.sh
         
-      - name: 'Commit'
+      - name: Commit
+        id: commit
         run: |
+          echo "DATE=$(date +"%Y.%m.%d-%H%M")" >> $GITHUB_ENV # ${{ env.DATE }}
           git config --global user.name 'github-actions[bot]'
           git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          git add .
-          git commit -m "update on: `date`"
-        
-      - name: 'Push changes'
+          if [[ $(git status) == *"nothing to commit"* ]]; then
+            echo "Nothing to commit, working tree clean."
+          else
+            git add .
+            git commit -m "Automatic update"
+            echo "status=successful" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Push changes
         uses: ad-m/github-push-action@master
+        if: steps.commit.outputs.status == 'successful'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           force: true
+
+      - name: Process the zip folder
+        run: |
+          mkdir -p zip
+          zip -qj9 ./zip/wireguard.zip ./wireguard/*
+          zip -qj9 ./zip/openvpn.zip ./openvpn/*
+          cd zip
+          echo "sha256sums:" >> zip.sha256sums
+          echo "\`\`\`" >> zip.sha256sums
+          sha256sum *.zip >> zip.sha256sums
+          echo "\`\`\`" >> zip.sha256sums
+          echo "ZIP=$PWD" >> $GITHUB_ENV
+
+      - name: Upload zip directory
+        uses: actions/upload-artifact@main
+        with:
+          name: ZIP
+          path: ${{ env.ZIP}}
+
+      - name: Generate release tag
+        id: tag
+        if: steps.commit.outputs.status == 'successful'
+        run: |
+          echo "release_tag=${{ env.DATE }}" >> $GITHUB_OUTPUT
+
+      - name: Upload firmware to release
+        uses: softprops/action-gh-release@v1
+        if: steps.commit.outputs.status == 'successful'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.tag.outputs.release_tag }}
+          body_path: ${{ env.ZIP }}/zip.sha256sums
+          files: ${{ env.ZIP }}/*.zip
