@@ -31,7 +31,7 @@ ipNetworkFile:
 domainFile:
   primary: ./domain_primary_sample
   alternative: ./domain_alternative_sample
-  matcher: full-map
+  matcher: suffix-tree
 hostsFile:
   hostsFile: ./hosts_sample
   finder: full-map

@@ -42,7 +42,7 @@
   "DomainFile": {
     "Primary": "./domain_primary_sample",
     "Alternative": "./domain_alternative_sample",
-    "Matcher":  "full-map"
+    "Matcher":  "suffix-tree"
   },
   "HostsFile": {
     "HostsFile": "C:\\Windows\\System32\\drivers\\etc\\hosts",

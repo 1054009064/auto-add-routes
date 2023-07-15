@@ -67,7 +67,21 @@ function generate(){
 	cp -f ./del.txt ./wireguard/del.txt && cp -f ./del.txt ./openvpn/del.txt
 }
 
+curl https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/accelerated-domains.china.conf | awk -F '/' '{print $2}' >  ./china_domain_list.txt
+
+function cndomain(){
+	result=$(md5sum ./china_domain_list.txt)
+	md5_1=$(echo $result | awk 'NR==1' | awk '{print $1}')
+	md5_2=$(echo $result | awk 'NR==2' | awk '{print $1}')
+	if [[ "$md5_1" != "$md5_2" ]];then
+		cp -f ./china_domain_list.txt ./wireguard/domain_primary_sample
+		cp -f ./china_domain_list.txt ./openvpn/domain_primary_sample
+	fi
+	rm ./china_domain_list.txt
+}
+
 
 cnip
 gfwdomain
 generate
+cndomain
