@@ -32,7 +32,7 @@ jobs:
         if: steps.commit.outputs.status == 'successful'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          force: true
+          #force: true
 
       - name: Process the zip folder
         run: |
@@ -50,7 +50,7 @@ jobs:
         uses: actions/upload-artifact@main
         with:
           name: ZIP
-          path: ${{ env.ZIP}}
+          path: ${{ env.ZIP }}
 
       - name: Generate release tag
         id: tag
