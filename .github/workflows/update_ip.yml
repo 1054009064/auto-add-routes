@@ -17,8 +17,8 @@ jobs:
       - name: Commit
         id: commit
         run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git config --global user.name '1054009064'
+          git config --global user.email '44148148+1054009064@users.noreply.github.com'
           if [[ $(git status) == *"nothing to commit"* ]]; then
             echo "Nothing to commit, working tree clean."
           else
