@@ -63,3 +63,11 @@ jobs:
           tag_name: ${{ env.DATE }}
           body_path: ${{ env.ZIP }}/zip.sha256sums
           files: ${{ env.ZIP }}/*.zip
+
+      - name: Delete workflow runs
+        uses: Mattraks/delete-workflow-runs@main
+        with:
+          token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          retain_days: 30
+          keep_minimum_runs: 7
