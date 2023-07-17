@@ -62,9 +62,9 @@ function generate(){
 		echo "add $IP mask $NETMASK default METRIC default IF default" >> ./add.txt
 		echo "delete $IP mask $NETMASK default METRIC default IF default" >> ./del.txt
 	done < ./china_ip_list.txt
-	rm ./china_ip_list.txt
 	cp -f ./add.txt ./wireguard/add.txt && cp -f ./add.txt ./openvpn/add.txt
 	cp -f ./del.txt ./wireguard/del.txt && cp -f ./del.txt ./openvpn/del.txt
+	rm ./china_ip_list.txt ./add.txt ./del.txt
 }
 
 curl https://raw.githubusercontent.com/felixonmars/dnsmasq-china-list/master/accelerated-domains.china.conf | awk -F '/' '{print $2}' >  ./china_domain_list.txt
