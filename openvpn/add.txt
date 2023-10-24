@@ -8623,7 +8623,6 @@ add 223.112.0.0 mask 255.252.0.0 default METRIC default IF default
 add 223.116.0.0 mask 255.254.0.0 default METRIC default IF default
 add 223.120.128.0 mask 255.255.128.0 default METRIC default IF default
 add 223.121.128.0 mask 255.255.128.0 default METRIC default IF default
-add 223.122.128.0 mask 255.255.128.0 default METRIC default IF default
 add 223.123.128.0 mask 255.255.128.0 default METRIC default IF default
 add 223.124.0.0 mask 255.252.0.0 default METRIC default IF default
 add 223.128.0.0 mask 255.254.0.0 default METRIC default IF default
